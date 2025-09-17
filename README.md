@@ -197,3 +197,53 @@ To fix this, go to Settings > Security & Privacy > General and click "Allow Anyw
 Try running `gk setup` again and then click "Open Anyway" to continue.
 
 ![](./images/open-anyway.png)
+
+## Business Process Flowchart
+
+```mermaid
+flowchart TB
+  %% --- Sources ---
+  A[Lead / Opportunity\n(CRM)] -->|handoff| B[Bid Agent\n(estimator prompts + RFI basis)]
+  B --> C[(Bid Package CSVs\nQTO • Cost Build • Client Cut\nAssembly_IDs • Cost Codes)]
+  C --> D{{Human-in-the-Loop\nsanity check}}
+  D -->|Approved| E[Client Proposal Sent]
+  E -->|Accepted| F[ERP/Accounting\n(Job/Estimate → WBS/GL map)]
+  F -->|sync cost codes & items| G[Time System\n(Activities/Labor Codes)]
+  F -.->|job #| PPORT[Portfolio: Docks FY’25]
+
+  %% --- Project creation pattern ---
+  D -->|Create projects via Ops Agent| H{{Ops Agent}}
+  H --> I[Project 1: Client-Facing\n"Dock – {Client/Address} – CF"]
+  H --> J[Project 2: Production\n"Dock – {Job#} – PROD"]
+  H --> K[(Phase Library – Hidden\nPiles • Boatlifts • Alt Roof • Permits • Fabrication\nTask Templates + Dependencies)]
+
+  K -->|Toggle on if in scope| J
+  I -->|Light milestones + client comms\n(no internals, no contingency shown)| CLIENT[Client View]
+  J -->|Procurement • Fabrication • Install • QA/QC\nCrewed tasks w/ budgets & units| FIELD[Field & PM View]
+  J -->|Budget ↔ Actuals| G
+  G -->|Timesheets| J
+  J -->|Committed $$ + Burn + CPI/SPI| PPORT
+  I -->|status, base price only| PPORT
+
+  %% --- Data backbone ---
+  subgraph Data Backbone (unchanged IDs end-to-end)
+    C --- X1[(Assembly_ID)]
+    C --- X2[(Cost Code)]
+    C --- X3[(Labor Code)]
+    X1 --- J
+    X2 --- J
+    X3 --- J
+    X2 --- F
+    X3 --- G
+  end
+
+  %% --- Options & VE ---
+  O[Alt Options\n(e.g., Standing Seam Δ, Deck Species Δ)] --> H
+  H -->|If option selected| J
+
+  %% --- Contingency policy ---
+  style I fill:#F7FBFF,stroke:#8CB3FF,stroke-width:1px
+  style J fill:#FFF7F0,stroke:#FF9A3C,stroke-width:1px
+  style PPORT fill:#F5FFF7,stroke:#6AC06A,stroke-width:1px
+
+```
