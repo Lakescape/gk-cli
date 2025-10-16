@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Myaalkc Lakescaping Control Center</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg-primary: #04080f;
+        --bg-secondary: #0b1420cc;
+        --bg-glass: rgba(11, 20, 32, 0.75);
+        --bg-emerald: linear-gradient(135deg, #0b877d 0%, #3ec7a8 45%, #6df9ff 100%);
+        --bg-sunrise: linear-gradient(135deg, #ffb347 0%, #ffcc33 55%, #ffecd2 100%);
+        --bg-mist: radial-gradient(circle at 20% 20%, rgba(77, 174, 255, 0.45), transparent 55%),
+          radial-gradient(circle at 80% 0%, rgba(0, 255, 198, 0.25), transparent 50%),
+          radial-gradient(circle at 20% 80%, rgba(255, 153, 102, 0.3), transparent 60%);
+        --border-glass: rgba(160, 230, 250, 0.25);
+        --text-primary: #eaf6ff;
+        --text-muted: #8aa3b5;
+        --accent-emerald: #4df3d9;
+        --accent-gold: #ffc857;
+        --accent-deep: #1c6f8c;
+        --shadow-soft: 0 16px 60px -25px rgba(4, 132, 169, 0.65);
+        --shadow-strong: 0 30px 90px -30px rgba(0, 0, 0, 0.75);
+        font-family: "Poppins", "Cairo", "Segoe UI", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 32px;
+        padding: 48px;
+        background-image: var(--bg-mist);
+        background-size: 120% 120%;
+        animation: drift 16s ease-in-out infinite alternate;
+      }
+
+      @media (max-width: 1080px) {
+        body {
+          grid-template-columns: 1fr;
+          padding: 28px;
+        }
+      }
+
+      h1, h2, h3, h4, h5 {
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        margin: 0;
+      }
+
+      .sidebar {
+        position: sticky;
+        top: 24px;
+        align-self: start;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+        padding: 28px;
+        border-radius: 28px;
+        background: var(--bg-glass);
+        backdrop-filter: blur(30px);
+        border: 1px solid var(--border-glass);
+        box-shadow: var(--shadow-soft);
+        isolation: isolate;
+      }
+
+      .logo-card {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+        border-radius: 22px;
+        background: linear-gradient(140deg, rgba(17, 39, 60, 0.9), rgba(34, 59, 72, 0.55));
+        border: 1px solid rgba(109, 249, 255, 0.18);
+      }
+
+      .logo-symbol {
+        width: 60px;
+        height: 60px;
+        border-radius: 24px;
+        background: linear-gradient(145deg, #25a08e, #42d4c4);
+        display: grid;
+        place-items: center;
+        box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.18), 0 18px 40px -20px rgba(0, 255, 213, 0.55);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .logo-symbol::after {
+        content: "";
+        position: absolute;
+        inset: 3px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.12);
+        mix-blend-mode: screen;
+      }
+
+      .logo-symbol span {
+        font-size: 26px;
+        font-weight: 700;
+        color: rgba(3, 21, 28, 0.85);
+        letter-spacing: 1px;
+      }
+
+      .logo-copy h2 {
+        font-size: 20px;
+        text-transform: uppercase;
+      }
+
+      .logo-copy p {
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-top: 6px;
+      }
+
+      .nav {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .nav button {
+        all: unset;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 14px 18px;
+        border-radius: 18px;
+        cursor: pointer;
+        color: var(--text-muted);
+        transition: 180ms ease;
+        position: relative;
+        border: 1px solid transparent;
+      }
+
+      .nav button:hover,
+      .nav button[aria-current="page"] {
+        color: var(--text-primary);
+        border-color: rgba(109, 249, 255, 0.2);
+        background: linear-gradient(140deg, rgba(36, 63, 81, 0.85), rgba(27, 100, 115, 0.4));
+        box-shadow: 0 12px 28px -18px rgba(77, 243, 217, 0.9);
+      }
+
+      .nav button span.icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 14px;
+        background: rgba(109, 249, 255, 0.12);
+        display: grid;
+        place-items: center;
+        font-size: 18px;
+      }
+
+      .nav button[aria-current="page"] span.icon {
+        background: rgba(109, 249, 255, 0.26);
+      }
+
+      .offline-block {
+        padding: 20px;
+        border-radius: 20px;
+        background: rgba(29, 47, 63, 0.75);
+        border: 1px solid rgba(109, 249, 255, 0.16);
+      }
+
+      .offline-block h3 {
+        font-size: 16px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--accent-emerald);
+      }
+
+      .offline-block p {
+        margin-top: 8px;
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+      }
+
+      header.hero {
+        padding: 32px;
+        border-radius: 32px;
+        background: linear-gradient(135deg, rgba(13, 22, 34, 0.88), rgba(9, 47, 60, 0.75));
+        backdrop-filter: blur(26px);
+        border: 1px solid rgba(74, 182, 211, 0.18);
+        box-shadow: var(--shadow-strong);
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+      }
+
+      header.hero::before,
+      header.hero::after {
+        content: "";
+        position: absolute;
+        inset: -60% 40% 30% -10%;
+        background: radial-gradient(circle, rgba(109, 249, 255, 0.25), transparent 70%);
+        filter: blur(35px);
+        transform: rotate(18deg);
+        opacity: 0.8;
+        animation: pulse 18s ease-in-out infinite;
+      }
+
+      header.hero::after {
+        inset: 40% -35% -60% 50%;
+        background: radial-gradient(circle, rgba(255, 204, 51, 0.25), transparent 60%);
+        transform: rotate(-14deg);
+        animation-delay: 6s;
+      }
+
+      .hero-top {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        align-items: flex-start;
+        justify-content: space-between;
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero-copy h1 {
+        font-size: 32px;
+        background: var(--bg-emerald);
+        -webkit-background-clip: text;
+        color: transparent;
+      }
+
+      .hero-copy p {
+        margin-top: 12px;
+        color: var(--text-muted);
+        max-width: 540px;
+        line-height: 1.6;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 14px 26px;
+        border-radius: 18px;
+        border: 1px solid transparent;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+      }
+
+      .btn.primary {
+        background-image: var(--bg-emerald);
+        color: #04201e;
+        box-shadow: 0 16px 40px -18px rgba(6, 147, 143, 0.85);
+      }
+
+      .btn.secondary {
+        background: rgba(10, 27, 36, 0.75);
+        border-color: rgba(77, 243, 217, 0.25);
+        color: var(--text-primary);
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.05);
+      }
+
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 22px;
+      }
+
+      .metric-card {
+        position: relative;
+        padding: 26px;
+        border-radius: 24px;
+        background: rgba(9, 23, 32, 0.8);
+        border: 1px solid rgba(109, 249, 255, 0.18);
+        box-shadow: var(--shadow-soft);
+        overflow: hidden;
+        isolation: isolate;
+      }
+
+      .metric-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 85% -10%, rgba(255, 204, 51, 0.35), transparent 45%);
+        opacity: 0;
+        transition: opacity 220ms ease;
+      }
+
+      .metric-card:hover::after {
+        opacity: 1;
+      }
+
+      .metric-card header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+      }
+
+      .metric-card header .icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 16px;
+        background: rgba(77, 243, 217, 0.18);
+        display: grid;
+        place-items: center;
+        font-size: 20px;
+      }
+
+      .metric-value {
+        font-size: 34px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      .metric-suffix {
+        font-size: 18px;
+        margin-left: 6px;
+        color: var(--accent-gold);
+      }
+
+      .metric-trend {
+        margin-top: 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 14px;
+        color: var(--text-muted);
+      }
+
+      .metric-trend strong {
+        color: var(--accent-emerald);
+      }
+
+      .panels {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 22px;
+      }
+
+      @media (max-width: 1320px) {
+        .panels {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .panel {
+        padding: 26px;
+        border-radius: 26px;
+        background: rgba(11, 22, 31, 0.85);
+        border: 1px solid rgba(109, 249, 255, 0.14);
+        box-shadow: var(--shadow-soft);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .panel h3 {
+        font-size: 20px;
+        margin-bottom: 18px;
+      }
+
+      .lake-scan {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+
+      @media (max-width: 860px) {
+        .lake-scan {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .scan-card {
+        padding: 20px;
+        border-radius: 20px;
+        background: rgba(17, 39, 51, 0.75);
+        border: 1px solid rgba(77, 243, 217, 0.18);
+      }
+
+      .scan-card h4 {
+        font-size: 15px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 14px;
+      }
+
+      .scan-metric {
+        font-size: 28px;
+        font-weight: 700;
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+      }
+
+      .scan-metric small {
+        font-size: 14px;
+        color: var(--text-muted);
+      }
+
+      .timeline {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .timeline-item {
+        padding: 18px;
+        border-radius: 20px;
+        background: rgba(16, 31, 45, 0.75);
+        border: 1px solid rgba(109, 249, 255, 0.12);
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 16px;
+        align-items: center;
+      }
+
+      .timeline-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 6px;
+        background: var(--accent-emerald);
+        box-shadow: 0 0 12px rgba(77, 243, 217, 0.75);
+      }
+
+      footer {
+        margin-top: 12px;
+        color: var(--text-muted);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      @keyframes drift {
+        0% {
+          background-position: 0% 40%;
+        }
+        100% {
+          background-position: 80% 60%;
+        }
+      }
+
+      @keyframes pulse {
+        0%, 100% {
+          opacity: 0.4;
+        }
+        50% {
+          opacity: 0.85;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="logo-card">
+        <div class="logo-symbol"><span>AK</span></div>
+        <div class="logo-copy">
+          <h2>AMANAT AL-KALIMA</h2>
+          <p>Myaalkc Lakescaping Intelligence Control</p>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Primary">
+        <button aria-current="page"><span class="icon">🛰️</span>Hydrograph Dashboard</button>
+        <button><span class="icon">🌿</span>Shoreline Stewardship</button>
+        <button><span class="icon">🧭</span>Procurement &amp; Sites</button>
+        <button><span class="icon">📊</span>Analytics &amp; VAT</button>
+        <button><span class="icon">🔐</span>Access Matrix</button>
+      </nav>
+
+      <section class="offline-block">
+        <h3>Offline Mode</h3>
+        <p>
+          Local-first ledger synced with Riyadh vault.<br />
+          TLV QR, ZATCA XML, and PDF/A-3 archives secured within encrypted
+          lakeside nodes.
+        </p>
+      </section>
+    </aside>
+
+    <main>
+      <header class="hero">
+        <div class="hero-top">
+          <div class="hero-copy">
+            <h1>Eco-Luxe Lakescaping Command</h1>
+            <p>
+              Orchestrate dredging cycles, nutrient balances, and premium scrap
+              reclamation for waterfront industrial retreats. Generate ZATCA
+              compliant invoices, monitor hydrology, and safeguard Riyal
+              profitability—all in a single bilingual command surface.
+            </p>
+          </div>
+          <div class="hero-actions">
+            <button class="btn primary">Launch Field Mission</button>
+            <button class="btn secondary">Export Eco Ledger (﷼)</button>
+          </div>
+        </div>
+      </header>
+
+      <section class="metrics-grid">
+        <article class="metric-card">
+          <header>
+            <h3>Watershed Revenue</h3>
+            <span class="icon">💧</span>
+          </header>
+          <div class="metric-value">5,482,000<span class="metric-suffix">﷼</span></div>
+          <div class="metric-trend">
+            <strong>+18.4%</strong> vs last 30 days · Reclaimed alloys at NEOM
+            Marinas
+          </div>
+        </article>
+
+        <article class="metric-card">
+          <header>
+            <h3>Habitat Vitality Index</h3>
+            <span class="icon">🌱</span>
+          </header>
+          <div class="metric-value">97.6<span class="metric-suffix">/100</span></div>
+          <div class="metric-trend">
+            <strong>Optimal</strong> oxygen and salinity after Riyadh Oasis
+            infusion
+          </div>
+        </article>
+
+        <article class="metric-card">
+          <header>
+            <h3>Regulatory Sync</h3>
+            <span class="icon">🧾</span>
+          </header>
+          <div class="metric-value">342<span class="metric-suffix">XML</span></div>
+          <div class="metric-trend">
+            <strong>0 failures</strong> TLV QR seals · ZATCA export grade A+ status
+          </div>
+        </article>
+
+        <article class="metric-card">
+          <header>
+            <h3>Asset Recovery</h3>
+            <span class="icon">⚙️</span>
+          </header>
+          <div class="metric-value">742<span class="metric-suffix">tons</span></div>
+          <div class="metric-trend">
+            <strong>+61 tons</strong> vs target · Low-impact dredging cadence
+          </div>
+        </article>
+      </section>
+
+      <section class="panels">
+        <article class="panel">
+          <h3>Lakescaping Telemetry</h3>
+          <div class="lake-scan">
+            <div class="scan-card">
+              <h4>Nutrient Balance</h4>
+              <div class="scan-metric">1.8<span>mg/L</span><small>Phosphorus</small></div>
+              <p>
+                AI-aeration aligned with moonlit tidal cycles. All readings sync
+                offline to IndexedDB for after-hours audits.
+              </p>
+            </div>
+            <div class="scan-card">
+              <h4>Water Clarity</h4>
+              <div class="scan-metric">92<span>%</span><small>Secchi depth</small></div>
+              <p>
+                Autonomous skimmers deployed across Diriyah promenade. Export
+                clarity runs directly to SheetJS workbooks.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel">
+          <h3>Signature Actions</h3>
+          <div class="timeline">
+            <div class="timeline-item">
+              <span class="timeline-dot"></span>
+              <div>
+                <strong>Generate ﷼ Invoice · Riyadh Royal Gardens</strong>
+                <p>
+                  Offline XML + TLV QR prepared. PDF/A-3 rendered with embedded
+                  eco-impact annex.
+                </p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <span class="timeline-dot"></span>
+              <div>
+                <strong>Deploy Algae Bloom Drones</strong>
+                <p>
+                  AI-route planning draws from localforage caches. Sync optional
+                  via Supabase for citywide oversight.
+                </p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <span class="timeline-dot"></span>
+              <div>
+                <strong>Export Lakescaping Ledger</strong>
+                <p>
+                  SheetJS workbook created with bilingual headers, pivot-ready
+                  nutrient spend analysis, and Riyal precision.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <footer>
+        Vision 2030 · Lakescaping Innovation · Offline-First Sovereign Control
+      </footer>
+    </main>
+  </body>
+</html>
