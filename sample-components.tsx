@@ -1,19 +1,26 @@
 import React from "react";
 
-const currency = (cents: number) =>
-  `$${(cents / 100).toLocaleString("en-US", {
+type CurrencyOptions = {
+  symbol?: string;
+  locale?: string;
+};
+
+const currency = (cents: number, opts: CurrencyOptions = {}) => {
+  const { symbol = "$", locale = "en-US" } = opts;
+  return `${symbol}${(cents / 100).toLocaleString(locale, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })}`;
+};
 
 export function KpiCards() {
   const kpis = [
-    { label: "Total Revenue", value: currency(824500000), delta: "+12% YoY" },
-    { label: "Gross Profit", value: currency(296400000), delta: "+6.4%" },
-    { label: "Profit Margin", value: "36%", delta: "+1.3pp" },
-    { label: "Outstanding A/R", value: currency(126800000), delta: "-4.2%" },
-    { label: "Active Customers", value: "187", delta: "+18" },
-    { label: "Win Rate", value: "28%", delta: "+2pp" },
+    { label: "Total Revenue", value: currency(125000000), detail: "156 jobs completed" },
+    { label: "Gross Profit", value: currency(43750000), detail: "35.0% margin" },
+    { label: "Profit Margin", value: "35.0%", detail: "of total revenue" },
+    { label: "Outstanding A/R", value: currency(8500000), detail: "12 overdue" },
+    { label: "Active Customers", value: "89", detail: "unique customers" },
+    { label: "Win Rate", value: "68%", detail: "last 30 days" },
   ];
 
   return (
@@ -23,8 +30,8 @@ export function KpiCards() {
           <p className="stat-label">{kpi.label}</p>
           <div className="flex items-end justify-between pt-2">
             <p className="stat-value">{kpi.value}</p>
-            <span className="badge badge-success">{kpi.delta}</span>
           </div>
+          <p className="mt-1 text-xs text-slate-300">{kpi.detail}</p>
         </article>
       ))}
     </section>
@@ -33,34 +40,50 @@ export function KpiCards() {
 
 const statusTone: Record<string, string> = {
   sent: "badge-warning",
-  accepted: "badge-success",
+  won: "badge-success",
+  draft: "badge-muted",
   lost: "badge-danger",
-  in_progress: "badge-warning",
-  completed: "badge-success",
   pending: "badge-warning",
+  viewed: "badge-warning",
+  scheduled: "badge-warning",
+  completed: "badge-success",
+  in_progress: "badge-warning",
 };
 
 export function BidsTable() {
   const bids = [
     {
-      id: "BID-2487",
-      customer: "Lake Travis Estates",
-      service: "Dock Repair",
-      dimensions: "42ft x 24ft",
-      total: currency(1485000),
-      status: "sent",
+      id: 232,
+      customer: "John Smith",
+      service: "Boat Lift",
+      dimensions: "30ft × 30ft",
+      total: currency(3200026),
+      status: "won",
+      outcome: "won",
       layout: "View",
-      created: "Sep 30, 2025",
+      created: "Nov 25, 2025",
     },
     {
-      id: "BID-2488",
-      customer: "Sunset Cove HOA",
-      service: "Seawall",
-      dimensions: "88ft shoreline",
-      total: currency(4850000),
-      status: "accepted",
+      id: 31,
+      customer: "Christer Rundlof",
+      service: "Dock Repair",
+      dimensions: "24ft × 16ft",
+      total: currency(199654),
+      status: "draft",
+      outcome: "pending",
       layout: "View",
-      created: "Sep 29, 2025",
+      created: "Oct 27, 2025",
+    },
+    {
+      id: 30,
+      customer: "Sarah Borders",
+      service: "Seawall",
+      dimensions: "—",
+      total: currency(4500000),
+      status: "sent",
+      outcome: "pending",
+      layout: "No layout",
+      created: "Oct 26, 2025",
     },
   ];
 
@@ -75,6 +98,7 @@ export function BidsTable() {
             <th>Dimensions</th>
             <th>Total</th>
             <th>Status</th>
+            <th>Outcome</th>
             <th>Layout</th>
             <th>Created</th>
           </tr>
@@ -93,6 +117,11 @@ export function BidsTable() {
                 </span>
               </td>
               <td>
+                <span className={`${statusTone[bid.outcome] ?? "badge-muted"} capitalize`}>
+                  {bid.outcome}
+                </span>
+              </td>
+              <td>
                 <button className="btn-primary px-3 py-1 text-xs">{bid.layout}</button>
               </td>
               <td className="text-slate-300">{bid.created}</td>
@@ -107,20 +136,20 @@ export function BidsTable() {
 export function JobsTable() {
   const jobs = [
     {
-      job: "JOB-1173",
-      customer: "Windy Point Marina",
-      service: "Seawall",
-      status: "in_progress",
-      revenue: currency(12850000),
-      endDate: "Oct 14, 2025",
-    },
-    {
-      job: "JOB-1174",
-      customer: "Hidden Shores",
+      job: "JOB-2025-089",
+      customer: "John Smith",
       service: "Dock Repair",
       status: "completed",
-      revenue: currency(6850000),
-      endDate: "Sep 18, 2025",
+      revenue: currency(8374395),
+      endDate: "Nov 20, 2025",
+    },
+    {
+      job: "JOB-2025-090",
+      customer: "Sarah Borders",
+      service: "Seawall",
+      status: "scheduled",
+      revenue: currency(4500000),
+      endDate: "Dec 5, 2025",
     },
   ];
 
@@ -180,13 +209,13 @@ export function LayoutGeneratorHero() {
       <div className="grid gap-3 md:grid-cols-3 text-xs text-slate-200">
         <div className="glass-border rounded-xl p-3">
           <p className="stat-label">Dimensions</p>
-          <p className="font-semibold text-white">42ft x 24ft footprint</p>
+          <p className="font-semibold text-white">30ft × 30ft footprint</p>
           <p className="text-slate-400">Auto-scales piling count + boat slip cutouts.</p>
         </div>
         <div className="glass-border rounded-xl p-3">
           <p className="stat-label">Materials</p>
-          <p className="font-semibold text-white">Ipe decking · Galvanized pilings</p>
-          <p className="text-slate-400">Pre-configured cost codes per tenant.</p>
+          <p className="font-semibold text-white">Composite decking · Steel pilings</p>
+          <p className="text-slate-400">Configured for per-tenant cost codes.</p>
         </div>
         <div className="glass-border rounded-xl p-3">
           <p className="stat-label">Docs</p>

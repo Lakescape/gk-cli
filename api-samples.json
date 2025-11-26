@@ -1,119 +1,243 @@
 {
   "baseUrl": "http://localhost:5000/api",
   "endpoints": {
-    "dashboard": {
-      "bids": {
-        "method": "GET",
-        "description": "List bids with layout info",
-        "response": {
-          "data": [
-            {
-              "id": "BID-2487",
-              "customer": "Lake Travis Estates",
-              "service": "dock_repair",
-              "dimensions": "42ft x 24ft",
-              "status": "sent",
-              "totalCents": 1485000,
-              "createdAt": "2025-09-30T12:42:00Z",
-              "layout": {
-                "svg": "/documents/view/layout/BID-2487.svg",
-                "pilingCount": 14,
-                "material": "galvanized",
-                "decking": "ipe",
-                "boatSlip": true
-              }
-            }
-          ],
-          "meta": {
-            "page": 1,
-            "pageSize": 25,
-            "total": 240
-          }
-        }
-      },
-      "kpis": {
-        "method": "GET",
-        "description": "KPI metrics for dashboard cards",
-        "response": {
-          "data": {
-            "totalRevenue": 824500000,
-            "grossProfit": 296400000,
-            "profitMargin": 36,
-            "outstandingAR": 126800000,
-            "activeCustomers": 187,
-            "winRate": 28
+    "/api/dashboard/bids": {
+      "method": "GET",
+      "params": { "limit": "number (default: 20)" },
+      "response": {
+        "success": true,
+        "data": [
+          {
+            "id": 232,
+            "service_type": "boat_lift",
+            "status": "won",
+            "total_value_cents": 3200026,
+            "total_formatted": "$32,000.26",
+            "outcome": "won",
+            "created_at": "2025-11-25T22:50:56.673Z",
+            "customer_name": "John Smith",
+            "customer_email": "john.smith@example.com",
+            "has_layout": true,
+            "dimensions": { "width": 30, "length": 30 }
           },
-          "meta": {
-            "refreshedAt": "2025-09-30T12:42:00Z"
+          {
+            "id": 31,
+            "service_type": "dock_repair",
+            "status": "draft",
+            "total_value_cents": 199654,
+            "total_formatted": "$1,996.54",
+            "outcome": "pending",
+            "created_at": "2025-10-27T15:50:14.224Z",
+            "customer_name": "Christer Rundlof",
+            "customer_email": "christer@example.com",
+            "has_layout": true,
+            "dimensions": { "width": 24, "length": 16 }
+          },
+          {
+            "id": 30,
+            "service_type": "seawall",
+            "status": "sent",
+            "total_value_cents": 4500000,
+            "total_formatted": "$45,000.00",
+            "outcome": "pending",
+            "created_at": "2025-10-26T10:30:00.000Z",
+            "customer_name": "Sarah Borders",
+            "customer_email": "sarah@example.com",
+            "has_layout": false,
+            "dimensions": null
           }
-        }
-      },
-      "invoices": {
-        "method": "GET",
-        "description": "Recent invoices and collection percentages",
-        "response": {
-          "data": [
-            {
-              "invoice": "INV-9031",
-              "customer": "Sunset Cove HOA",
-              "amountCents": 4850000,
-              "status": "pending",
-              "dueDate": "2025-10-05",
-              "collectionPercent": 64
-            }
-          ]
-        }
-      },
-      "jobs": {
-        "method": "GET",
-        "description": "Active and completed jobs",
-        "response": {
-          "data": [
-            {
-              "job": "JOB-1173",
-              "customer": "Windy Point Marina",
-              "service": "seawall",
-              "status": "in_progress",
-              "revenueCents": 12850000,
-              "endDate": "2025-10-14"
-            }
-          ]
-        }
+        ],
+        "count": 3
       }
     },
-    "documents": {
-      "list": {
-        "method": "GET",
-        "description": "List generated documents",
-        "response": {
-          "layouts": ["BID-2487.svg", "BID-2488.svg"],
-          "bids": ["BID-2487.html", "BID-2488.html"]
-        }
+    "/api/dashboard/kpis": {
+      "method": "GET",
+      "response": {
+        "success": true,
+        "data": [
+          {
+            "name": "Total Revenue",
+            "value": 1250000,
+            "formatted": "$1,250,000.00",
+            "description": "156 jobs completed",
+            "positive": true
+          },
+          {
+            "name": "Gross Profit",
+            "value": 437500,
+            "formatted": "$437,500.00",
+            "description": "35.0% margin",
+            "positive": true
+          },
+          {
+            "name": "Profit Margin",
+            "value": 35.0,
+            "formatted": "35.0%",
+            "description": "of total revenue",
+            "positive": true
+          },
+          {
+            "name": "Outstanding A/R",
+            "value": 85000,
+            "formatted": "$85,000.00",
+            "description": "12 overdue",
+            "critical": true
+          },
+          {
+            "name": "Active Customers",
+            "value": 89,
+            "formatted": "89",
+            "description": "unique customers",
+            "positive": true
+          },
+          {
+            "name": "Win Rate",
+            "value": 68,
+            "formatted": "68%",
+            "description": "last 30 days",
+            "positive": true
+          }
+        ]
+      }
+    },
+    "/api/dashboard/invoices": {
+      "method": "GET",
+      "params": { "limit": "number (default: 10)" },
+      "response": {
+        "success": true,
+        "data": [
+          {
+            "id": 1,
+            "invoice_number": "INV-2025-0156",
+            "total_cents": 3200000,
+            "paid_cents": 1600000,
+            "balance_cents": 1600000,
+            "status": "draft",
+            "due_date": "2025-12-15T00:00:00.000Z",
+            "customer_name": "John Smith",
+            "collection_pct": 50
+          },
+          {
+            "id": 2,
+            "invoice_number": "INV-2025-0155",
+            "total_cents": 4500000,
+            "paid_cents": 4500000,
+            "balance_cents": 0,
+            "status": "paid",
+            "due_date": "2025-11-30T00:00:00.000Z",
+            "customer_name": "Lake Travis Marina",
+            "collection_pct": 100
+          },
+          {
+            "id": 3,
+            "invoice_number": "INV-2025-0154",
+            "total_cents": 1250000,
+            "paid_cents": 0,
+            "balance_cents": 1250000,
+            "status": "overdue",
+            "due_date": "2025-11-01T00:00:00.000Z",
+            "customer_name": "Lakeway HOA",
+            "collection_pct": 0
+          }
+        ]
+      }
+    },
+    "/api/dashboard/jobs": {
+      "method": "GET",
+      "params": { "status": "string (comma-separated)", "limit": "number" },
+      "response": {
+        "success": true,
+        "data": [
+          {
+            "id": 1,
+            "job_number": "JOB-2025-089",
+            "invoiced_amount_cents": 8374395,
+            "actual_cost_cents": 5443356,
+            "status": "completed",
+            "actual_end_date": "2025-11-20T00:00:00.000Z",
+            "service_type": "dock_repair",
+            "customer_name": "John Smith"
+          },
+          {
+            "id": 2,
+            "job_number": "JOB-2025-090",
+            "invoiced_amount_cents": 4500000,
+            "actual_cost_cents": 2925000,
+            "status": "scheduled",
+            "actual_end_date": "2025-12-05T00:00:00.000Z",
+            "service_type": "seawall",
+            "customer_name": "Sarah Borders"
+          }
+        ]
+      }
+    },
+    "/api/documents/list": {
+      "method": "GET",
+      "response": {
+        "success": true,
+        "data": [
+          {
+            "id": "dock_30x30_steel_composite",
+            "type": "layout",
+            "filename": "dock_30x30_steel_composite.svg",
+            "created_at": "2025-11-26T03:39:00.000Z",
+            "size": 15777
+          },
+          {
+            "id": "BID-20251126-APEH",
+            "type": "bid",
+            "filename": "BID-20251126-APEH.html",
+            "created_at": "2025-11-26T03:39:34.000Z",
+            "size": 26104
+          }
+        ],
+        "count": 2
+      }
+    },
+    "/api/documents/generate-layout": {
+      "method": "POST",
+      "request": {
+        "dock_width_ft": 30,
+        "dock_length_ft": 30,
+        "piling_count": 6,
+        "piling_material": "steel",
+        "piling_diameter_inches": 6,
+        "decking_material": "composite",
+        "cutouts": [
+          { "x": 2.5, "y": 2.5, "width_ft": 25, "length_ft": 10, "label": "Boat Slip" }
+        ],
+        "show_dimensions": true,
+        "show_grid": false,
+        "title": "30x30 Steel Piling Dock"
       },
-      "view": {
-        "method": "GET",
-        "path": "/documents/view/:type/:filename",
-        "description": "Serve SVG/HTML document",
-        "response": "<svg>...</svg>"
-      },
-      "generateLayout": {
-        "method": "POST",
-        "path": "/documents/generate-layout",
-        "description": "Generate dock layout SVG",
-        "payload": {
-          "width": 42,
-          "length": 24,
-          "pilingCount": 14,
-          "material": "galvanized",
-          "diameter": 12,
-          "decking": "ipe",
-          "boatSlip": true
-        },
-        "response": {
-          "filename": "BID-2487.svg",
-          "url": "/documents/view/layout/BID-2487.svg"
+      "response": {
+        "success": true,
+        "data": {
+          "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 700 750'>...</svg>",
+          "dimensions": {
+            "total_deck_sf": 900,
+            "net_deck_sf": 650,
+            "cutout_sf": 250,
+            "piling_count": 6
+          },
+          "file_path": "/output/layouts/dock_30x30_steel.svg"
         }
       }
     }
+  },
+  "enums": {
+    "service_types": [
+      "dock_repair",
+      "seawall",
+      "boat_lift",
+      "deck",
+      "lakescaping",
+      "electrical",
+      "beach_fill"
+    ],
+    "bid_status": ["draft", "sent", "viewed", "won", "lost"],
+    "bid_outcome": ["won", "lost", "pending", "abandoned"],
+    "invoice_status": ["draft", "sent", "paid", "overdue"],
+    "job_status": ["scheduled", "in_progress", "completed", "cancelled"]
   }
 }
