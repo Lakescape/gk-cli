@@ -6,7 +6,7 @@ type CurrencyOptions = {
 };
 
 const currency = (cents: number, opts: CurrencyOptions = {}) => {
-  const { symbol = "$", locale = "en-US" } = opts;
+  const { symbol = "﷼", locale = "en-SA" } = opts;
   return `${symbol}${(cents / 100).toLocaleString(locale, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
