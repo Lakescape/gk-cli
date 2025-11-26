@@ -1,0 +1,119 @@
+{
+  "baseUrl": "http://localhost:5000/api",
+  "endpoints": {
+    "dashboard": {
+      "bids": {
+        "method": "GET",
+        "description": "List bids with layout info",
+        "response": {
+          "data": [
+            {
+              "id": "BID-2487",
+              "customer": "Lake Travis Estates",
+              "service": "dock_repair",
+              "dimensions": "42ft x 24ft",
+              "status": "sent",
+              "totalCents": 1485000,
+              "createdAt": "2025-09-30T12:42:00Z",
+              "layout": {
+                "svg": "/documents/view/layout/BID-2487.svg",
+                "pilingCount": 14,
+                "material": "galvanized",
+                "decking": "ipe",
+                "boatSlip": true
+              }
+            }
+          ],
+          "meta": {
+            "page": 1,
+            "pageSize": 25,
+            "total": 240
+          }
+        }
+      },
+      "kpis": {
+        "method": "GET",
+        "description": "KPI metrics for dashboard cards",
+        "response": {
+          "data": {
+            "totalRevenue": 824500000,
+            "grossProfit": 296400000,
+            "profitMargin": 36,
+            "outstandingAR": 126800000,
+            "activeCustomers": 187,
+            "winRate": 28
+          },
+          "meta": {
+            "refreshedAt": "2025-09-30T12:42:00Z"
+          }
+        }
+      },
+      "invoices": {
+        "method": "GET",
+        "description": "Recent invoices and collection percentages",
+        "response": {
+          "data": [
+            {
+              "invoice": "INV-9031",
+              "customer": "Sunset Cove HOA",
+              "amountCents": 4850000,
+              "status": "pending",
+              "dueDate": "2025-10-05",
+              "collectionPercent": 64
+            }
+          ]
+        }
+      },
+      "jobs": {
+        "method": "GET",
+        "description": "Active and completed jobs",
+        "response": {
+          "data": [
+            {
+              "job": "JOB-1173",
+              "customer": "Windy Point Marina",
+              "service": "seawall",
+              "status": "in_progress",
+              "revenueCents": 12850000,
+              "endDate": "2025-10-14"
+            }
+          ]
+        }
+      }
+    },
+    "documents": {
+      "list": {
+        "method": "GET",
+        "description": "List generated documents",
+        "response": {
+          "layouts": ["BID-2487.svg", "BID-2488.svg"],
+          "bids": ["BID-2487.html", "BID-2488.html"]
+        }
+      },
+      "view": {
+        "method": "GET",
+        "path": "/documents/view/:type/:filename",
+        "description": "Serve SVG/HTML document",
+        "response": "<svg>...</svg>"
+      },
+      "generateLayout": {
+        "method": "POST",
+        "path": "/documents/generate-layout",
+        "description": "Generate dock layout SVG",
+        "payload": {
+          "width": 42,
+          "length": 24,
+          "pilingCount": 14,
+          "material": "galvanized",
+          "diameter": 12,
+          "decking": "ipe",
+          "boatSlip": true
+        },
+        "response": {
+          "filename": "BID-2487.svg",
+          "url": "/documents/view/layout/BID-2487.svg"
+        }
+      }
+    }
+  }
+}
