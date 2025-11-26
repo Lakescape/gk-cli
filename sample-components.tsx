@@ -5,20 +5,22 @@ type CurrencyOptions = {
   locale?: string;
 };
 
-const currency = (cents: number, opts: CurrencyOptions = {}) => {
+const formatCurrency = (cents: number, opts: CurrencyOptions = {}) => {
   const { symbol = "﷼", locale = "en-SA" } = opts;
-  return `${symbol}${(cents / 100).toLocaleString(locale, {
+  const formatted = (cents / 100).toLocaleString(locale, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  })}`;
+  });
+
+  return `${symbol}\u00a0${formatted}`;
 };
 
 export function KpiCards() {
   const kpis = [
-    { label: "Total Revenue", value: currency(125000000), detail: "156 jobs completed" },
-    { label: "Gross Profit", value: currency(43750000), detail: "35.0% margin" },
+    { label: "Total Revenue", value: formatCurrency(125000000), detail: "156 jobs completed" },
+    { label: "Gross Profit", value: formatCurrency(43750000), detail: "35.0% margin" },
     { label: "Profit Margin", value: "35.0%", detail: "of total revenue" },
-    { label: "Outstanding A/R", value: currency(8500000), detail: "12 overdue" },
+    { label: "Outstanding A/R", value: formatCurrency(8500000), detail: "12 overdue" },
     { label: "Active Customers", value: "89", detail: "unique customers" },
     { label: "Win Rate", value: "68%", detail: "last 30 days" },
   ];
@@ -57,7 +59,7 @@ export function BidsTable() {
       customer: "John Smith",
       service: "Boat Lift",
       dimensions: "30ft × 30ft",
-      total: currency(3200026),
+      total: formatCurrency(3200026),
       status: "won",
       outcome: "won",
       layout: "View",
@@ -68,7 +70,7 @@ export function BidsTable() {
       customer: "Christer Rundlof",
       service: "Dock Repair",
       dimensions: "24ft × 16ft",
-      total: currency(199654),
+      total: formatCurrency(199654),
       status: "draft",
       outcome: "pending",
       layout: "View",
@@ -79,7 +81,7 @@ export function BidsTable() {
       customer: "Sarah Borders",
       service: "Seawall",
       dimensions: "—",
-      total: currency(4500000),
+      total: formatCurrency(4500000),
       status: "sent",
       outcome: "pending",
       layout: "No layout",
@@ -140,7 +142,7 @@ export function JobsTable() {
       customer: "John Smith",
       service: "Dock Repair",
       status: "completed",
-      revenue: currency(8374395),
+      revenue: formatCurrency(8374395),
       endDate: "Nov 20, 2025",
     },
     {
@@ -148,7 +150,7 @@ export function JobsTable() {
       customer: "Sarah Borders",
       service: "Seawall",
       status: "scheduled",
-      revenue: currency(4500000),
+      revenue: formatCurrency(4500000),
       endDate: "Dec 5, 2025",
     },
   ];
