@@ -12,7 +12,7 @@
             "service_type": "boat_lift",
             "status": "won",
             "total_value_cents": 3200026,
-            "total_formatted": "﷼32,000.26",
+            "total_formatted": "$32,000.26",
             "outcome": "won",
             "created_at": "2025-11-25T22:50:56.673Z",
             "customer_name": "John Smith",
@@ -25,7 +25,7 @@
             "service_type": "dock_repair",
             "status": "draft",
             "total_value_cents": 199654,
-            "total_formatted": "﷼1,996.54",
+            "total_formatted": "$1,996.54",
             "outcome": "pending",
             "created_at": "2025-10-27T15:50:14.224Z",
             "customer_name": "Christer Rundlof",
@@ -38,7 +38,7 @@
             "service_type": "seawall",
             "status": "sent",
             "total_value_cents": 4500000,
-            "total_formatted": "﷼45,000.00",
+            "total_formatted": "$45,000.00",
             "outcome": "pending",
             "created_at": "2025-10-26T10:30:00.000Z",
             "customer_name": "Sarah Borders",
@@ -58,14 +58,14 @@
           {
             "name": "Total Revenue",
             "value": 1250000,
-            "formatted": "﷼1,250,000.00",
+            "formatted": "$1,250,000.00",
             "description": "156 jobs completed",
             "positive": true
           },
           {
             "name": "Gross Profit",
             "value": 437500,
-            "formatted": "﷼437,500.00",
+            "formatted": "$437,500.00",
             "description": "35.0% margin",
             "positive": true
           },
@@ -79,7 +79,7 @@
           {
             "name": "Outstanding A/R",
             "value": 85000,
-            "formatted": "﷼85,000.00",
+            "formatted": "$85,000.00",
             "description": "12 overdue",
             "critical": true
           },

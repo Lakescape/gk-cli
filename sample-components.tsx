@@ -6,13 +6,13 @@ type CurrencyOptions = {
 };
 
 const formatCurrency = (cents: number, opts: CurrencyOptions = {}) => {
-  const { symbol = "﷼", locale = "en-SA" } = opts;
+  const { symbol = "$", locale = "en-US" } = opts;
   const formatted = (cents / 100).toLocaleString(locale, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
 
-  return `${symbol}\u00a0${formatted}`;
+  return `${symbol}${formatted}`;
 };
 
 export function KpiCards() {

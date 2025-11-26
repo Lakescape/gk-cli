@@ -6,7 +6,7 @@ To package and deploy the lakescaping dashboard to Replit (or another host) with
 - **Repo link or zip**: Current project folder tree and build tooling (static HTML, React, Next.js, etc.).
 - **Design tokens**: Tailwind config (if any), color palette, font choices, spacing scale, and icon set.
 - **Brand assets**: Logo files (SVG/PNG), favicons, and any background textures to embed.
-- **Data samples**: JSON or API responses for metrics, timeline, tables, and cards (include Riyal values with units).
+- **Data samples**: JSON or API responses for metrics, timeline, tables, and cards (include USD values with units).
 - **Runtime requirements**: Auth expectations, environment variables, and base URLs for APIs (mock endpoints if needed).
 - **Offline expectations**: What must persist locally (IndexedDB/localforage) vs. what can fetch on load; sync cadence if applicable.
 
@@ -22,7 +22,7 @@ To package and deploy the lakescaping dashboard to Replit (or another host) with
 - Enable HTTPS-only asset calls and avoid absolute `http://` URLs to prevent mixed content warnings.
 
 ## Data & Localization
-- Provide sample payloads for: metrics, activity feed, task/operations list, and timeline; include **﷼** formatting and units.
+- Provide sample payloads for: metrics, activity feed, task/operations list, and timeline; include **$** formatting and units.
 - Confirm language toggle behavior (English default, Arabic RTL optional) and any Arabic copy to preload.
 - Note any date/number formatting preferences (Gregorian vs Hijri display, Arabic numerals for RTL mode).
 
