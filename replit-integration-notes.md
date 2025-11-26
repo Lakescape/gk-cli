@@ -37,3 +37,28 @@
 - Share the Replit repo or zip so I can align file paths and wire data providers.
 - Confirm if you want the Next.js App Router version pre-wired with Tailwind tokens and the existing Riyal-first, offline-first cues.
 - Provide any brand palette updates or revised logo assets; I’ll bake them into the theme tokens and gradients.
+
+## How to move this back into Replit
+Pick whichever import path matches your workflow:
+
+- **From GitHub:** push this repo to GitHub, open Replit → “Create Repl” → “Import from GitHub”, paste the repo URL, then select the main branch. Replit will clone everything (including `tailwind.config.js`, `globals.css`, `sample-components.tsx`, `api-samples.json`, and `lakescaping-dashboard.html`).
+- **Via ZIP upload:** run `git archive -o lakescapes-dashboard.zip HEAD` locally, download the ZIP, then in Replit use the Files panel “Upload file” option to drop the ZIP. Extract it in Replit (right-click → “Unzip”) so the files land in the project root.
+
+Once the files are in Replit:
+
+1. **Install dependencies** (if this is a fresh Next.js Repl):
+   ```bash
+   npm install
+   ```
+2. **Start the dev server** (App Router):
+   ```bash
+   npm run dev -- --hostname 0.0.0.0 --port 3000
+   ```
+3. **Preview** via the Replit webview at `https://<your-repl-subdomain>.replit.app` or the Ports panel on 3000.
+4. **Static HTML fallback:** If you only need the standalone demo, place `lakescaping-dashboard.html` in `/public` (or keep it at root) and serve with `npx http-server .` from Replit’s shell.
+5. **Build check (optional):**
+   ```bash
+   npm run build
+   ```
+
+This keeps the existing dark glassmorphism theme, Riyal-aware formatting, and API sample shapes ready for wiring to your backend at `http://localhost:5000/api` inside Replit.
