@@ -11,6 +11,7 @@ GitKraken CLI is available on macOS, Windows, and Unix systems.
 - [MCP Server](#mcp-server)
 - [Documentation](#documentation)
 - [Workflows](#workflows)
+- [Design Snippets](#design-snippets)
 - [`git` Command Passthrough](#git-command-passthrough)
 - [Installation](#installation)
 - [Troubleshooting](#troubleshooting)
@@ -93,6 +94,13 @@ Once you have familiarized yourself with using a single repo, try out creating w
 # Add a repo to the current work item
 gk work add ./path/to/repo # path could be as simple as "." if you are in the directory already
 ```
+
+## Design Snippets
+
+Two standalone HTML snippets live in `./snippets/` for quick visual experiments:
+
+- `threejs-orbit-viewer.html` — a Three.js orbit/zoom viewer with a sample dock blockout and optional GLB/GLTF import. Open the file locally and replace the commented loader path with your asset to preview in the browser.
+- `littoralis-brand-kit.html` — a Littoralis-inspired brand board featuring copper/teal palette, hero copy scaffolding, and layout ideas for NFT minting pages.
 
 ## `git` Command Passthrough
 
